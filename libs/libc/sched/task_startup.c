@@ -94,6 +94,11 @@ extern uintptr_t _etext;
 static void cxx_initialize(void)
 {
 #ifdef CONFIG_HAVE_CXXINITIALIZE
+#if defined(CONFIG_ARCH_SIM) && defined(CONFIG_HOST_MACOS)
+  extern void macho_call_saved_init_funcs(void);
+
+  macho_call_saved_init_funcs();
+#else /* defined(CONFIG_ARCH_SIM) && defined(CONFIG_HOST_MACOS) */
   static int inited = 0;
 
   if (inited == 0)
@@ -125,6 +130,7 @@ static void cxx_initialize(void)
 
       inited = 1;
     }
+#endif /* defined(CONFIG_ARCH_SIM) && defined(CONFIG_HOST_MACOS) */
 #endif
 }
 
