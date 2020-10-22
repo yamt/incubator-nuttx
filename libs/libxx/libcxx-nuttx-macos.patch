@@ -1,0 +1,29 @@
+--- libcxx/include/__config.orig2	2020-10-22 11:29:25.000000000 +0900
++++ libcxx/include/__config	2020-10-22 11:33:12.000000000 +0900
+@@ -10,6 +10,26 @@
+ #ifndef _LIBCPP_CONFIG
+ #define _LIBCPP_CONFIG
+ 
++/*
++ * Note: NuttX sim is a program for the host OS.
++ * eg. NuttX sim on macOS is likely built with __APPLE__.
++ */
++#if defined(__NuttX__)
++#undef __linux__
++#undef __APPLE__
++#undef __FreeBSD__
++#undef __NetBSD__
++#undef _WIN32
++#undef __sun__
++#undef _AIX
++/*
++ * For the current use of the __unix__ macro in this library,
++ * NuttX is not __unix__.
++ * This might need to be revisited in future.
++ */
++#undef __unix__
++#endif
++
+ #if defined(_MSC_VER) && !defined(__clang__)
+ #  if !defined(_LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER)
+ #    define _LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER
