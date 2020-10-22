@@ -1,0 +1,22 @@
+--- libcxx/src/locale.cpp.orig4	2020-10-23 07:25:28.000000000 +0900
++++ libcxx/src/locale.cpp	2020-10-23 07:25:38.000000000 +0900
+@@ -1149,7 +1149,7 @@ ctype<char>::__classic_upper_table() _NO
+ {
+     return _LIBCPP_GET_C_LOCALE->__ctype_toupper;
+ }
+-#elif __NetBSD__
++#elif defined(__NetBSD__)
+ const short*
+ ctype<char>::__classic_lower_table() _NOEXCEPT
+ {
+--- libcxx/src/filesystem/operations.cpp.orig4	2020-10-23 07:26:50.000000000 +0900
++++ libcxx/src/filesystem/operations.cpp	2020-10-23 07:29:40.000000000 +0900
+@@ -542,7 +542,7 @@ path __canonical(path const& orig_p, err
+   ErrorHandler<path> err("canonical", ec, &orig_p, &cwd);
+ 
+   path p = __do_absolute(orig_p, &cwd, ec);
+-#if _POSIX_VERSION >= 200112
++#if defined(_POSIX_VERSION) && _POSIX_VERSION >= 200112
+   std::unique_ptr<char, decltype(&::free)>
+     hold(::realpath(p.c_str(), nullptr), &::free);
+   if (hold.get() == nullptr)

@@ -27,6 +27,7 @@ $(TOPDIR)/include/libcxx:
 	$(Q) mv libcxx-$(VERSION).src libcxx
 	$(Q) patch -p0 < 0001-libcxx-Port-to-NuttX-https-nuttx.apache.org-RTOS.patch
 	$(Q) patch -p0 < libcxx-nuttx-macos.patch
+	$(Q) patch -p0 < libcxx-misc.patch
 	$(Q) $(DIRLINK) $(CURDIR)/libcxx/include $(TOPDIR)/include/libcxx
 
 dirlinks:: $(TOPDIR)/include/libcxx
