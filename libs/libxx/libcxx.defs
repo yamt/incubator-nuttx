@@ -36,6 +36,7 @@ distclean::
 
 CXXFLAGS += ${shell $(DEFINE) "$(CC)" __GLIBCXX__}
 CXXFLAGS += ${shell $(DEFINE) "$(CC)" _LIBCPP_BUILDING_LIBRARY}
+CXXFLAGS += ${shell $(DEFINE) "$(CC)" __NuttX__}
 
 CPPSRCS += $(notdir $(wildcard libcxx/src/*.cpp))
 CPPSRCS += $(notdir $(wildcard libcxx/src/experimental/*.cpp))
