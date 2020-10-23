@@ -66,7 +66,7 @@ ifneq ($(CONFIG_DEBUG_NOOPT),y)
 endif
 
 ARCHCFLAGS = -fno-builtin -ffunction-sections -fdata-sections -fstrict-volatile-bitfields -mlongcalls
-ARCHCXXFLAGS = $(ARCHCFLAGS) -fno-exceptions -fcheck-new -fno-rtti
+ARCHCXXFLAGS = $(ARCHCFLAGS)
 ARCHWARNINGS = -Wall -Wstrict-prototypes -Wshadow -Wundef
 ARCHWARNINGSXX = -Wall -Wshadow -Wundef
 ARCHPICFLAGS = -fpic
@@ -74,6 +74,19 @@ ARCHPICFLAGS = -fpic
 CFLAGS = $(ARCHCFLAGS) $(ARCHWARNINGS) $(ARCHOPTIMIZATION) $(ARCHCPUFLAGS) $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRAFLAGS) -pipe
 CPICFLAGS = $(ARCHPICFLAGS) $(CFLAGS)
 CXXFLAGS = $(ARCHCXXFLAGS) $(ARCHWARNINGSXX) $(ARCHOPTIMIZATION) $(ARCHCPUFLAGS) $(ARCHXXINCLUDES) $(ARCHDEFINES) $(EXTRAFLAGS) -pipe
+
+ifeq ($(CONFIG_LIBCXX),y)
+  CXXFLAGS += -std=c++14 -D_LIBCPP_STD_VER=14
+  CXXFLAGS += -D__NuttX__
+
+  CXXFLAGS += -D__GLIBCXX__
+
+  ifneq ($(CONFIG_CXX_EXCEPTION),y)
+    CXXFLAGS += -fno-exceptions -D_LIBCPP_NO_EXCEPTIONS
+    CXXFLAGS += -fcheck-new
+  endif
+endif
+
 CXXPICFLAGS = $(ARCHPICFLAGS) $(CXXFLAGS)
 CPPFLAGS = $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRAFLAGS)
 AFLAGS = $(CFLAGS) -D__ASSEMBLY__
