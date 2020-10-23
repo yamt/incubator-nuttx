@@ -87,7 +87,16 @@ AFLAGS = $(CFLAGS) -D__ASSEMBLY__
 ifeq ($(CONFIG_LIBCXX),y)
   CXXFLAGS += -std=c++14 -D_LIBCPP_STD_VER=14
   CXXFLAGS += -D__NuttX__
-  CXXFLAGS += -DLIBCXX_BUILDING_LIBCXXABI
+
+  ifeq ($(CONFIG_HOST_MACOS),y)
+    # macOS uses libc++abi
+    CXXFLAGS += -DLIBCXX_BUILDING_LIBCXXABI
+  else
+    # Linux C++ ABI seems vary.
+    # Probably __GLIBCXX__ is the best bet.
+    # XXX what to do for windows?
+    CXXFLAGS += -D__GLIBCXX__
+  endif
 
   ifneq ($(CONFIG_CXX_EXCEPTION),y)
     CXXFLAGS += -fno-exceptions -D_LIBCPP_NO_EXCEPTIONS
