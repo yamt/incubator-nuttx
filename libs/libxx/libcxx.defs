@@ -66,6 +66,13 @@ libcxx/src/locale.cpp_CXXFLAGS += -Wno-shadow
 # libcxx/src/filesystem/filesystem_common.h:201:24: error: declaration 'struct stat' does not declare anything [-Werror]
 #   201 | using StatT = struct ::stat;
 #       |                        ^~~~
+#
+# To me (yamamoto), this seems like a GCC bug.
+# Looking at the GCC code, unfortunately, there seems to be no way to
+# disable this warning.
+#
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64259
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82097
 libcxx/src/filesystem/directory_iterator.cpp_CXXFLAGS += -Wno-shadow -Wno-error
 libcxx/src/filesystem/operations.cpp_CXXFLAGS += -Wno-shadow -Wno-error
 
