@@ -57,6 +57,18 @@ CXXFLAGS += ${shell $(DEFINE) "$(CC)" __NuttX__}
 libcxx/src/barrier.cpp_CXXFLAGS += -Wno-shadow
 libcxx/src/locale.cpp_CXXFLAGS += -Wno-shadow
 
+# Workaround the following warning with "c++ (Ubuntu 9.3.0-10ubuntu2) 9.3.0"
+# For files including filesyste_common.h.
+#
+# libcxx/src/filesystem/filesystem_common.h:200:27: error: declaration 'struct timespec' does not declare anything [-Werror]
+#   200 | using TimeSpec = struct ::timespec;
+#       |                           ^~~~~~~~
+# libcxx/src/filesystem/filesystem_common.h:201:24: error: declaration 'struct stat' does not declare anything [-Werror]
+#   201 | using StatT = struct ::stat;
+#       |                        ^~~~
+libcxx/src/filesystem/directory_iterator.cpp_CXXFLAGS += -Wno-shadow -Wno-error
+libcxx/src/filesystem/operations.cpp_CXXFLAGS += -Wno-shadow -Wno-error
+
 CPPSRCS += $(notdir $(wildcard libcxx/src/*.cpp))
 CPPSRCS += $(notdir $(wildcard libcxx/src/experimental/*.cpp))
 CPPSRCS += $(notdir $(wildcard libcxx/src/filesystem/*.cpp))
