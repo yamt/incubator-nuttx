@@ -53,6 +53,7 @@ CXXFLAGS += ${shell $(DEFINE) "$(CC)" __NuttX__}
 #    29 |     ptrdiff_t&         __expected;
 #       |                        ^~~~~~~~~~
 libcxx/src/barrier.cpp_CXXFLAGS += -Wno-shadow
+libcxx/src/locale.cpp_CXXFLAGS += -Wno-shadow
 
 CPPSRCS += $(notdir $(wildcard libcxx/src/*.cpp))
 CPPSRCS += $(notdir $(wildcard libcxx/src/experimental/*.cpp))
