@@ -79,7 +79,7 @@ typedef unsigned int       _uint32_t;
  * - int64_t is long for Ubuntu x86-64
  */
 
-#if defined(__APPLE__) || !defined(_LP64)
+#if defined(CONFIG_HOST_MACOS) || !defined(_LP64)
 typedef signed long long   _int64_t;
 typedef unsigned long long _uint64_t;
 #else

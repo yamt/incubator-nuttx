@@ -44,7 +44,7 @@
  * Pre-processor Definitions
  ****************************************************************************/
 
-#if defined(__APPLE__)
+#if defined(CONFIG_HOST_MACOS)
 #  define _PRI64PREFIX "ll"
 #  define _SCN64PREFIX "ll"
 #  define INT64_C(x)  x ## ll
