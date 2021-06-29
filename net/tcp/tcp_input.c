@@ -446,6 +446,7 @@ reset:
   return;
 
 found:
+  nwarn("found %x\n", (int)tcp->flags);
 
   /* Update the connection's window size */
 
