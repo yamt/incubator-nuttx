@@ -24,6 +24,7 @@
 
 #include <nuttx/config.h>
 
+#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #ifdef CONFIG_SIM_ASAN
@@ -84,6 +85,8 @@ void up_initial_state(struct tcb_s *tcb)
    * the return address.
    */
 
+  DEBUGASSERT(((uintptr_t)tcb->stack_base_ptr + tcb->adj_stack_size) % 16
+              == 0);
   tcb->xcp.regs[JB_SP] = (xcpt_reg_t)tcb->stack_base_ptr +
                                      tcb->adj_stack_size -
                                      sizeof(xcpt_reg_t);
