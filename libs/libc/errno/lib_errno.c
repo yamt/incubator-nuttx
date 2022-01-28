@@ -27,6 +27,8 @@
 #include <nuttx/arch.h>
 #include <nuttx/tls.h>
 
+#include <debug.h>
+
 /****************************************************************************
  * Private Data
  ****************************************************************************/
@@ -57,7 +59,14 @@ FAR int *__errno(void)
 {
   /* Get the TLS tls_info_s structure instance for this thread */
 
+  nwarn("called\n");
   FAR struct tls_info_s *tlsinfo = up_tls_info();
+
+  nwarn("tlsinfo %p\n", tlsinfo);
+  if (tlsinfo)
+    {
+      nwarn("&tlsinfo->tl_errno %p\n", &tlsinfo->tl_errno);
+    }
 
   /* And return the return refernce to the error number */
 
