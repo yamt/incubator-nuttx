@@ -252,7 +252,7 @@ void xtensa_add_region(void)
 #endif
   size -= esp_himem_reserved_area_size();
 
-  MM_ADDREGION(start, size);
+  /* MM_ADDREGION(start, size); */
 #endif
 }
 #endif
