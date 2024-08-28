@@ -48,6 +48,8 @@
  * Pre-processor Definitions
  ****************************************************************************/
 
+#define PSRAM_MODE PSRAM_VADDR_MODE_NORMAL
+#if 0
 #ifndef CONFIG_SMP
 #  define PSRAM_MODE PSRAM_VADDR_MODE_NORMAL
 #else
@@ -57,6 +59,7 @@
 #  define PSRAM_MODE PSRAM_VADDR_MODE_LOWHIGH
 #endif
 #endif
+#endif /* 0 */
 
 /* Let's to assume SPIFLASH SPEED == SPIRAM SPEED for now */
 
