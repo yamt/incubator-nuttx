@@ -76,6 +76,13 @@ int xtensa_swint(int irq, void *context, void *arg)
 
   switch (cmd)
     {
+      case SYS_set_pid:
+        {
+  _info("%s set pid %d\n", __func__, (int)regs[REG_A3]);
+          regs[REG_INT_CTX] = regs[REG_A3];
+        }
+        break;
+
       /* A2=SYS_save_context:  This is a save context command:
        *
        * int up_saveusercontext(uint32_t *saveregs);

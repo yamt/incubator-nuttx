@@ -88,9 +88,9 @@
  */
 
 #ifndef CONFIG_BUILD_FLAT
-#  define CONFIG_SYS_RESERVED 9
+#  define CONFIG_SYS_RESERVED 10
 #else
-#  define CONFIG_SYS_RESERVED 5
+#  define CONFIG_SYS_RESERVED 6
 #endif
 
 /* Xtensa system calls ******************************************************/
@@ -133,6 +133,8 @@
 #define SYS_syscall_return        (4)
 #endif /* CONFIG_LIB_SYSCALL */
 
+#define SYS_set_pid               (5)
+
 #ifndef CONFIG_BUILD_FLAT
 /* SYS call 4:
  *
@@ -140,7 +142,7 @@
  *        noreturn_function;
  */
 
-#define SYS_task_start            (5)
+#define SYS_task_start            (6)
 
 /* SYS call 5:
  *
@@ -149,7 +151,7 @@
  *        noreturn_function
  */
 
-#define SYS_pthread_start         (6)
+#define SYS_pthread_start         (7)
 
 /* SYS call 6:
  *
@@ -157,14 +159,14 @@
  *                     siginfo_t *info, void *ucontext);
  */
 
-#define SYS_signal_handler        (7)
+#define SYS_signal_handler        (8)
 
 /* SYS call 7:
  *
  * void signal_handler_return(void);
  */
 
-#define SYS_signal_handler_return (8)
+#define SYS_signal_handler_return (9)
 #endif /* !CONFIG_BUILD_FLAT */
 
 /****************************************************************************
