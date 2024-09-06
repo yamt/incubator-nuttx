@@ -123,7 +123,7 @@
 #  define _REG_INT_CTX_START  _REG_WINDOW_TMPS
 #endif
 
-#ifdef CONFIG_XTENSA_HAVE_GENERAL_EXCEPTION_HOOKS
+#ifndef CONFIG_BUILD_FLAT
 /* Temporary space for saving Interrupt Context information */
 
 #  define REG_INT_CTX       (_REG_INT_CTX_START + 0)

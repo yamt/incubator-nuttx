@@ -347,11 +347,10 @@ noreturn_function void __start(void)
 
 #  endif
 
-  int ret = map_rom_segments(app_drom_start, app_drom_vaddr, app_drom_size,
-                       app_irom_start, app_irom_vaddr, app_irom_size);
-  if (ret != 0)
+  if (map_rom_segments(app_drom_start, app_drom_vaddr, app_drom_size,
+                       app_irom_start, app_irom_vaddr, app_irom_size) != 0)
     {
-      ets_printf("Failed to setup XIP, aborting (%d)\n", ret);
+      ets_printf("Failed to setup XIP, aborting\n");
       while (true);
     }
 
