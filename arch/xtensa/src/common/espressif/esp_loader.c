@@ -263,7 +263,7 @@ int map_rom_segments(uint32_t app_drom_start, uint32_t app_drom_vaddr,
 
 #if defined (CONFIG_ESP32S2_APP_FORMAT_MCUBOOT) || \
     defined (CONFIG_ESP32S3_APP_FORMAT_MCUBOOT) || \
-    defined (CONFIG_ESP32_APP_FORMAT_MCUBOOT)
+    defined (CONFIG_ESP32_APP_FORMAT_MCUBOOT) || 1
   ets_printf("IROM segment aligned lma 0x%08x vma 0x%08x len 0x%06x (%u)\n",
       app_irom_start_aligned, app_irom_vaddr_aligned,
       app_irom_size, app_irom_size);
@@ -298,6 +298,12 @@ int map_rom_segments(uint32_t app_drom_start, uint32_t app_drom_vaddr,
   rc |= cache_flash_mmu_set(1, 0, app_drom_vaddr_aligned,
                             app_drom_start_aligned, 64,
                             (int)drom_page_count);
+  rc  = cache_flash_mmu_set(0, 3, app_drom_vaddr_aligned,
+                            app_drom_start_aligned, 64,
+                            (int)drom_page_count);
+  rc |= cache_flash_mmu_set(1, 3, app_drom_vaddr_aligned,
+                            app_drom_start_aligned, 64,
+                            (int)drom_page_count);
 
   irom_page_count = (app_irom_size + SPI_FLASH_MMU_PAGE_SIZE - 1) /
                               SPI_FLASH_MMU_PAGE_SIZE;
@@ -305,6 +311,12 @@ int map_rom_segments(uint32_t app_drom_start, uint32_t app_drom_vaddr,
                             app_irom_start_aligned, 64,
                             (int)irom_page_count);
   rc |= cache_flash_mmu_set(1, 0, app_irom_vaddr_aligned,
+                            app_irom_start_aligned, 64,
+                            (int)irom_page_count);
+  rc |= cache_flash_mmu_set(0, 3, app_irom_vaddr_aligned,
+                            app_irom_start_aligned, 64,
+                            (int)irom_page_count);
+  rc |= cache_flash_mmu_set(1, 3, app_irom_vaddr_aligned,
                             app_irom_start_aligned, 64,
                             (int)irom_page_count);
 #else

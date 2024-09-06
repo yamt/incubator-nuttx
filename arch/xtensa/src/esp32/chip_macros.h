@@ -39,7 +39,7 @@
 
 #include <nuttx/config.h>
 
-#if defined(CONFIG_ESP32_PID) && defined(CONFIG_BUILD_PROTECTED)
+#if defined(CONFIG_ESP32_PID)
 #include "hardware/esp32_pid.h"
 #endif
 
