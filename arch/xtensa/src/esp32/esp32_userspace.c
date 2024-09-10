@@ -171,6 +171,12 @@ static noinline_function IRAM_ATTR void configure_flash_mmu(void)
   ASSERT(cache_flash_mmu_set(1, PIDCTRL_PID_USER, drom_vma_aligned,
                              drom_lma_aligned, 64,
                              (int)drom_page_count) == 0);
+  ASSERT(cache_flash_mmu_set(0, 3, drom_vma_aligned,
+                             drom_lma_aligned, 64,
+                             (int)drom_page_count) == 0);
+  ASSERT(cache_flash_mmu_set(1, 3, drom_vma_aligned,
+                             drom_lma_aligned, 64,
+                             (int)drom_page_count) == 0);
 
   irom_lma_aligned = app_irom_lma & MMU_FLASH_MASK;
   irom_vma_aligned = app_irom_vma & MMU_FLASH_MASK;
@@ -185,6 +191,12 @@ static noinline_function IRAM_ATTR void configure_flash_mmu(void)
                              irom_lma_aligned, 64,
                              (int)irom_page_count) == 0);
   ASSERT(cache_flash_mmu_set(1, PIDCTRL_PID_USER, irom_vma_aligned,
+                             irom_lma_aligned, 64,
+                             (int)irom_page_count) == 0);
+  ASSERT(cache_flash_mmu_set(0, 3, irom_vma_aligned,
+                             irom_lma_aligned, 64,
+                             (int)irom_page_count) == 0);
+  ASSERT(cache_flash_mmu_set(1, 3, irom_vma_aligned,
                              irom_lma_aligned, 64,
                              (int)irom_page_count) == 0);
 
@@ -224,6 +236,8 @@ static noinline_function IRAM_ATTR void configure_sram_mmu(void)
                             32, 128) == 0);
   ASSERT(cache_sram_mmu_set(0, PIDCTRL_PID_USER, SOC_EXTRAM_DATA_LOW, 0,
                             32, 128) == 0);
+  ASSERT(cache_sram_mmu_set(0, 3, SOC_EXTRAM_DATA_LOW, 0,
+                            32, 128) == 0);
 
   /* Flush and enable icache for APP CPU */
 
@@ -234,6 +248,8 @@ static noinline_function IRAM_ATTR void configure_sram_mmu(void)
   ASSERT(cache_sram_mmu_set(1, PIDCTRL_PID_KERNEL, SOC_EXTRAM_DATA_LOW, 0,
                             32, 128) == 0);
   ASSERT(cache_sram_mmu_set(1, PIDCTRL_PID_USER, SOC_EXTRAM_DATA_LOW, 0,
+                            32, 128) == 0);
+  ASSERT(cache_sram_mmu_set(1, 3, SOC_EXTRAM_DATA_LOW, 0,
                             32, 128) == 0);
 #endif
 }
