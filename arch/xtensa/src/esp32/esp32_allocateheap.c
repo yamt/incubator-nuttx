@@ -242,6 +242,7 @@ void xtensa_add_region(void)
   MM_ADDREGION(start, size);
 #endif
 
+#if 0
 #ifdef CONFIG_ESP32_SPIRAM_COMMON_HEAP
 #ifdef CONFIG_XTENSA_EXTMEM_BSS
   start = (void *)(_ebss_extmem);
@@ -253,6 +254,7 @@ void xtensa_add_region(void)
   size -= esp_himem_reserved_area_size();
 
   MM_ADDREGION(start, size);
+#endif
 #endif
 }
 #endif
