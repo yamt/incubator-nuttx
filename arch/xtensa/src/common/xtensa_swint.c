@@ -37,6 +37,8 @@
 #include "signal/signal.h"
 #include "xtensa.h"
 
+#include "esp32_spiram.h"
+
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
@@ -80,6 +82,18 @@ int xtensa_swint(int irq, void *context, void *arg)
         {
   _info("%s set pid %d\n", __func__, (int)regs[REG_A3]);
           regs[REG_INT_CTX] = regs[REG_A3];
+        }
+        break;
+
+      case SYS_sram_mmu_set:
+        {
+           uint32_t pid = regs[REG_A3];
+           uint32_t va = regs[REG_A4];
+           uint32_t pa = regs[REG_A5];
+           uint32_t n = regs[REG_A6];
+           int ret = cache_sram_mmu_set(0, pid, va, pa, 32, n);
+           _info("%s SYS_sram_mmu_set ret %d\n", __func__, ret);
+           regs[REG_A2] = ret;
         }
         break;
 

@@ -88,9 +88,9 @@
  */
 
 #ifndef CONFIG_BUILD_FLAT
-#  define CONFIG_SYS_RESERVED 10
+#  define CONFIG_SYS_RESERVED 11
 #else
-#  define CONFIG_SYS_RESERVED 6
+#  define CONFIG_SYS_RESERVED 7
 #endif
 
 /* Xtensa system calls ******************************************************/
@@ -168,6 +168,8 @@
 
 #define SYS_signal_handler_return (9)
 #endif /* !CONFIG_BUILD_FLAT */
+
+#define SYS_sram_mmu_set          (10)
 
 /****************************************************************************
  * Public Types
