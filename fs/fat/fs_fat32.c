@@ -132,6 +132,8 @@ const struct mountpt_operations g_fat_operations =
   NULL,              /* mmap */
   fat_truncate,      /* truncate */
   NULL,              /* poll */
+  NULL,              /* readv */
+  NULL,              /* writev */
 
   fat_sync,          /* sync */
   fat_dup,           /* dup */
