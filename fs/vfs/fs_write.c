@@ -136,7 +136,7 @@ ssize_t file_write(FAR struct file *filep, FAR const void *buf,
 {
   struct iovec iov;
 
-  iov.iov_base = (void *)buf;
+  iov.iov_base = (FAR void *)buf;
   iov.iov_len = nbytes;
   return file_writev(filep, &iov, 1);
 }
