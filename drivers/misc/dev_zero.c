@@ -40,11 +40,9 @@
  ****************************************************************************/
 
 static ssize_t devzero_readv(FAR struct file *filep,
-                             FAR const struct iovec *iov,
-                             int iovcnt);
+                             FAR const struct uio *uio);
 static ssize_t devzero_writev(FAR struct file *filep,
-                             FAR const struct iovec *iov,
-                             int iovcnt);
+                              FAR const struct uio *uio);
 static int     devzero_poll(FAR struct file *filep, FAR struct pollfd *fds,
                             bool setup);
 
@@ -76,10 +74,9 @@ static const struct file_operations g_devzero_fops =
  ****************************************************************************/
 
 static ssize_t devzero_readv(FAR struct file *filep,
-                             FAR const struct iovec *iov,
-                             int iovcnt)
+                             FAR const struct uio *uio)
 {
-  ssize_t total =  iovec_total_len(iov, iovcnt);
+  ssize_t total =  iovec_total_len(uio);
   int i;
 
   UNUSED(filep);
@@ -89,6 +86,8 @@ static ssize_t devzero_readv(FAR struct file *filep,
       return total;
     }
 
+  FAR const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
   for (i = 0; i < iovcnt; i++)
     {
       memset(iov[i].iov_base, 0, iov[i].iov_len);
@@ -102,12 +101,11 @@ static ssize_t devzero_readv(FAR struct file *filep,
  ****************************************************************************/
 
 static ssize_t devzero_writev(FAR struct file *filep,
-                              FAR const struct iovec *iov,
-                              int iovcnt)
+                              FAR const struct uio *uio)
 {
   UNUSED(filep);
 
-  return iovec_total_len(iov, iovcnt);
+  return iovec_total_len(uio);
 }
 
 /****************************************************************************

@@ -54,8 +54,7 @@
  *
  * Input Parameters:
  *   filep  - File structure instance
- *   iov    - User-provided iovec to save the data
- *   iovcnt - The number of iovec
+ *   uio    - User buffer infomation
  *
  * Returned Value:
  *   The positive non-zero number of bytes read on success, 0 on if an
@@ -63,8 +62,7 @@
  *
  ****************************************************************************/
 
-ssize_t file_readv(FAR struct file *filep, FAR const struct iovec *iov,
-                   int iovcnt)
+ssize_t file_readv(FAR struct file *filep, FAR const struct uio *uio)
 {
   FAR struct inode *inode;
   ssize_t ret = -EBADF;
@@ -92,11 +90,11 @@ ssize_t file_readv(FAR struct file *filep, FAR const struct iovec *iov,
     {
       if (inode->u.i_ops->readv)
         {
-          ret = inode->u.i_ops->readv(filep, iov, iovcnt);
+          ret = inode->u.i_ops->readv(filep, uio);
         }
       else if (inode->u.i_ops->read)
         {
-          ret = iovec_compat_readv(filep, iov, iovcnt);
+          ret = iovec_compat_readv(filep, uio);
         }
     }
 
@@ -137,10 +135,13 @@ ssize_t file_readv(FAR struct file *filep, FAR const struct iovec *iov,
 ssize_t file_read(FAR struct file *filep, FAR void *buf, size_t nbytes)
 {
   struct iovec iov;
+  struct uio uio;
 
   iov.iov_base = buf;
   iov.iov_len = nbytes;
-  return file_readv(filep, &iov, 1);
+  uio.uio_iov = &iov;
+  uio.uio_iovcnt = 1;
+  return file_readv(filep, &uio);
 }
 
 /****************************************************************************
@@ -166,6 +167,7 @@ ssize_t file_read(FAR struct file *filep, FAR void *buf, size_t nbytes)
 
 ssize_t nx_readv(int fd, FAR const struct iovec *iov, int iovcnt)
 {
+  struct uio uio;
   FAR struct file *filep;
   ssize_t ret;
 
@@ -181,7 +183,9 @@ ssize_t nx_readv(int fd, FAR const struct iovec *iov, int iovcnt)
 
   /* Then let file_read do all of the work. */
 
-  ret = file_readv(filep, iov, iovcnt);
+  uio.uio_iov = iov;
+  uio.uio_iovcnt = iovcnt;
+  ret = file_readv(filep, &uio);
   fs_putfilep(filep);
   return ret;
 }

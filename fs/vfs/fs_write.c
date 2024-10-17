@@ -55,8 +55,7 @@
  *
  * Input Parameters:
  *   filep  - Instance of struct file to use with the write
- *   iov    - Data to write
- *   iovcnt - The number of vectors
+ *   uio    - User buffer infomation
  *
  * Returned Value:
  *  On success, the number of bytes written are returned (zero indicates
@@ -66,8 +65,7 @@
  *
  ****************************************************************************/
 
-ssize_t file_writev(FAR struct file *filep, FAR const struct iovec *iov,
-                    int iovcnt)
+ssize_t file_writev(FAR struct file *filep, FAR const struct uio *uio)
 {
   FAR struct inode *inode;
   ssize_t ret = -EBADF;
@@ -88,11 +86,11 @@ ssize_t file_writev(FAR struct file *filep, FAR const struct iovec *iov,
     {
       if (inode->u.i_ops->writev)
         {
-          ret = inode->u.i_ops->writev(filep, iov, iovcnt);
+          ret = inode->u.i_ops->writev(filep, uio);
         }
       else if (inode->u.i_ops->write)
         {
-          ret = iovec_compat_writev(filep, iov, iovcnt);
+          ret = iovec_compat_writev(filep, uio);
         }
     }
 
@@ -135,10 +133,13 @@ ssize_t file_write(FAR struct file *filep, FAR const void *buf,
                    size_t nbytes)
 {
   struct iovec iov;
+  struct uio uio;
 
   iov.iov_base = (FAR void *)buf;
   iov.iov_len = nbytes;
-  return file_writev(filep, &iov, 1);
+  uio.uio_iov = &iov;
+  uio.uio_iovcnt = 1;
+  return file_writev(filep, &uio);
 }
 
 /****************************************************************************
@@ -168,6 +169,7 @@ ssize_t file_write(FAR struct file *filep, FAR const void *buf,
 
 ssize_t nx_writev(int fd, FAR const struct iovec *iov, int iovcnt)
 {
+  struct uio uio;
   FAR struct file *filep;
   ssize_t ret;
 
@@ -182,7 +184,9 @@ ssize_t nx_writev(int fd, FAR const struct iovec *iov, int iovcnt)
        * index.  Note that file_write() will return the errno on failure.
        */
 
-      ret = file_writev(filep, iov, iovcnt);
+      uio.uio_iov = iov;
+      uio.uio_iovcnt = iovcnt;
+      ret = file_writev(filep, &uio);
       fs_putfilep(filep);
     }
 

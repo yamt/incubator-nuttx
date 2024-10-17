@@ -28,6 +28,16 @@
 #include <sys/types.h>
 
 /****************************************************************************
+ * Public Type Definitions
+ ****************************************************************************/
+
+struct uio
+{
+  FAR const struct iovec *uio_iov;
+  int uio_iovcnt;
+};
+
+/****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
 
@@ -40,8 +50,7 @@
  *
  ****************************************************************************/
 
-struct iovec;
-ssize_t iovec_total_len(FAR const struct iovec *iov, int iovcnt);
+ssize_t iovec_total_len(FAR const struct uio *uio);
 
 /****************************************************************************
  * Name: iovec_compat_readv
@@ -53,8 +62,7 @@ ssize_t iovec_total_len(FAR const struct iovec *iov, int iovcnt);
 
 struct file;
 ssize_t iovec_compat_readv(FAR struct file *filep,
-                           FAR const struct iovec *iov,
-                           int iovcnt);
+                           FAR const struct uio *uio);
 
 /****************************************************************************
  * Name: iovec_compat_writev
@@ -65,7 +73,6 @@ ssize_t iovec_compat_readv(FAR struct file *filep,
  ****************************************************************************/
 
 ssize_t iovec_compat_writev(FAR struct file *filep,
-                            FAR const struct iovec *iov,
-                            int iovcnt);
+                            FAR const struct uio *uio);
 
 #endif /* __INCLUDE_NUTTX_FS_UIO_H */

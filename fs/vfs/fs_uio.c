@@ -46,8 +46,10 @@
  *
  ****************************************************************************/
 
-ssize_t iovec_total_len(FAR const struct iovec *iov, int iovcnt)
+ssize_t iovec_total_len(FAR const struct uio *uio)
 {
+  const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
   size_t len = 0;
   int i;
 
@@ -73,9 +75,10 @@ ssize_t iovec_total_len(FAR const struct iovec *iov, int iovcnt)
  ****************************************************************************/
 
 ssize_t iovec_compat_readv(FAR struct file *filep,
-                           FAR const struct iovec *iov,
-                           int iovcnt)
+                           FAR const struct uio *uio)
 {
+  const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
   FAR struct inode *inode = filep->f_inode;
   ssize_t ntotal;
   ssize_t nread;
@@ -141,9 +144,10 @@ ssize_t iovec_compat_readv(FAR struct file *filep,
  ****************************************************************************/
 
 ssize_t iovec_compat_writev(FAR struct file *filep,
-                            FAR const struct iovec *iov,
-                            int iovcnt)
+                            FAR const struct uio *uio)
 {
+  const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
   FAR struct inode *inode = filep->f_inode;
   ssize_t ntotal;
   ssize_t nwritten;

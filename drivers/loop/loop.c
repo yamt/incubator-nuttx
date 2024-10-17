@@ -40,11 +40,9 @@
  ****************************************************************************/
 
 static ssize_t loop_readv(FAR struct file *filep,
-                          FAR const struct iovec *iov,
-                          int iovcnt);
+                          FAR const struct uio *uio);
 static ssize_t loop_writev(FAR struct file *filep,
-                           FAR const struct iovec *iov,
-                           int iovcnt);
+                           FAR const struct uio *uio);
 static int     loop_ioctl(FAR struct file *filep, int cmd,
                  unsigned long arg);
 
@@ -76,8 +74,7 @@ static const struct file_operations g_loop_fops =
  ****************************************************************************/
 
 static ssize_t loop_readv(FAR struct file *filep,
-                          FAR const struct iovec *iov,
-                          int iovcnt)
+                          FAR const struct uio *uio)
 {
   return 0; /* Return EOF */
 }
@@ -87,10 +84,9 @@ static ssize_t loop_readv(FAR struct file *filep,
  ****************************************************************************/
 
 static ssize_t loop_writev(FAR struct file *filep,
-                           FAR const struct iovec *iov,
-                           int iovcnt)
+                           FAR const struct uio *uio)
 {
-  return iovec_total_len(iov, iovcnt); /* Say that everything was written */
+  return iovec_total_len(uio); /* Say that everything was written */
 }
 
 /****************************************************************************

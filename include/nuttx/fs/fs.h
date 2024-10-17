@@ -185,6 +185,7 @@ struct statfs;
 struct pollfd;
 struct mtd_dev_s;
 struct tcb_s;
+struct uio;
 
 /* The internal representation of type DIR is just a container for an inode
  * reference, and the path of directory.
@@ -235,10 +236,8 @@ struct file_operations
 
   CODE int     (*poll)(FAR struct file *filep, FAR struct pollfd *fds,
                        bool setup);
-  CODE ssize_t (*readv)(FAR struct file *filep, FAR const struct iovec *iov,
-                        int iovcnt);
-  CODE ssize_t (*writev)(FAR struct file *filep, FAR const struct iovec *iov,
-                         int iovcnt);
+  CODE ssize_t (*readv)(FAR struct file *filep, FAR const struct uio *uio);
+  CODE ssize_t (*writev)(FAR struct file *filep, FAR const struct uio *uio);
 
   /* The two structures need not be common after this point */
 
@@ -335,10 +334,8 @@ struct mountpt_operations
   CODE int     (*truncate)(FAR struct file *filep, off_t length);
   CODE int     (*poll)(FAR struct file *filep, FAR struct pollfd *fds,
                        bool setup);
-  CODE ssize_t (*readv)(FAR struct file *filep, FAR const struct iovec *iov,
-                        int iovcnt);
-  CODE ssize_t (*writev)(FAR struct file *filep, FAR const struct iovec *iov,
-                         int iovcnt);
+  CODE ssize_t (*readv)(FAR struct file *filep, FAR const struct uio *uio);
+  CODE ssize_t (*writev)(FAR struct file *filep, FAR const struct uio *uio);
 
   /* The two structures need not be common after this point. The following
    * are extended methods needed to deal with the unique needs of mounted
@@ -1427,8 +1424,7 @@ int close_mtddriver(FAR struct inode *pinode);
  ****************************************************************************/
 
 ssize_t file_read(FAR struct file *filep, FAR void *buf, size_t nbytes);
-ssize_t file_readv(FAR struct file *filep, FAR const struct iovec *iov,
-                   int iovcnt);
+ssize_t file_readv(FAR struct file *filep, FAR const struct uio *uio);
 
 /****************************************************************************
  * Name: nx_read
@@ -1482,8 +1478,7 @@ ssize_t nx_readv(int fd, FAR const struct iovec *iov, int iovcnt);
 
 ssize_t file_write(FAR struct file *filep, FAR const void *buf,
                    size_t nbytes);
-ssize_t file_writev(FAR struct file *filep, FAR const struct iovec *iov,
-                    int iovcnt);
+ssize_t file_writev(FAR struct file *filep, FAR const struct uio *uio);
 
 /****************************************************************************
  * Name: nx_write
