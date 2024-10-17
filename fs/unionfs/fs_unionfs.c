@@ -231,6 +231,8 @@ const struct mountpt_operations g_unionfs_operations =
   NULL,                /* mmap */
   unionfs_truncate,    /* truncate */
   NULL,                /* poll */
+  NULL,                /* readv */
+  NULL,                /* writev */
 
   unionfs_sync,        /* sync */
   unionfs_dup,         /* dup */
