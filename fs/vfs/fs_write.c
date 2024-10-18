@@ -38,6 +38,72 @@
 #include "inode/inode.h"
 
 /****************************************************************************
+ * Private Functions
+ ****************************************************************************/
+
+/****************************************************************************
+ * Name: iovec_compat_writev
+ *
+ * Description:
+ *   Emulate writev using file_operation::write.
+ *
+ ****************************************************************************/
+
+static ssize_t iovec_compat_writev(FAR struct file *filep,
+                                   FAR const struct uio *uio)
+{
+  const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
+  FAR struct inode *inode = filep->f_inode;
+  ssize_t ntotal;
+  ssize_t nwritten;
+  size_t remaining;
+  FAR uint8_t *buffer;
+  int i;
+
+  DEBUGASSERT(inode->u.i_ops->write != NULL);
+
+  /* Process each entry in the struct iovec array */
+
+  for (i = 0, ntotal = 0; i < iovcnt; i++)
+    {
+      /* Ignore zero-length writes */
+
+      if (iov[i].iov_len > 0)
+        {
+          buffer    = iov[i].iov_base;
+          remaining = iov[i].iov_len;
+
+          /* Write repeatedly as necessary to write the entire buffer */
+
+          do
+            {
+              nwritten = inode->u.i_ops->write(filep, (void *)buffer,
+                                                      remaining);
+
+              /* Check for a write error */
+
+              if (nwritten < 0)
+                {
+                  return ntotal ? ntotal : nwritten;
+                }
+
+              /* Update pointers and counts in order to handle partial
+               * buffer writes.
+               */
+
+              buffer    += nwritten;
+              remaining -= nwritten;
+              ntotal    += nwritten;
+            }
+          while (remaining > 0);
+        }
+    }
+
+  return ntotal;
+}
+
+/****************************************************************************
  * Public Functions
  ****************************************************************************/
 

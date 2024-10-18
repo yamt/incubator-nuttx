@@ -64,15 +64,4 @@ struct file;
 ssize_t iovec_compat_readv(FAR struct file *filep,
                            FAR const struct uio *uio);
 
-/****************************************************************************
- * Name: iovec_compat_writev
- *
- * Description:
- *   Emulate writev using file_operation::compat_write.
- *
- ****************************************************************************/
-
-ssize_t iovec_compat_writev(FAR struct file *filep,
-                            FAR const struct uio *uio);
-
 #endif /* __INCLUDE_NUTTX_FS_UIO_H */
