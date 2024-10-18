@@ -38,6 +38,79 @@
 #include "inode/inode.h"
 
 /****************************************************************************
+ * Private Functions
+ ****************************************************************************/
+
+/****************************************************************************
+ * Name: iovec_compat_readv
+ *
+ * Description:
+ *   Emulate readv using file_operation::read.
+ *
+ ****************************************************************************/
+
+static ssize_t iovec_compat_readv(FAR struct file *filep,
+                                  FAR const struct uio *uio)
+{
+  const struct iovec *iov = uio->uio_iov;
+  int iovcnt = uio->uio_iovcnt;
+  FAR struct inode *inode = filep->f_inode;
+  ssize_t ntotal;
+  ssize_t nread;
+  size_t remaining;
+  FAR uint8_t *buffer;
+  int i;
+
+  DEBUGASSERT(inode->u.i_ops->read != NULL);
+
+  /* Process each entry in the struct iovec array */
+
+  for (i = 0, ntotal = 0; i < iovcnt; i++)
+    {
+      /* Ignore zero-length reads */
+
+      if (iov[i].iov_len > 0)
+        {
+          buffer    = iov[i].iov_base;
+          remaining = iov[i].iov_len;
+
+          /* Read repeatedly as necessary to fill buffer */
+
+          do
+            {
+              nread = inode->u.i_ops->read(filep, (void *)buffer,
+                                                  remaining);
+
+              /* Check for a read error */
+
+              if (nread < 0)
+                {
+                  return ntotal ? ntotal : nread;
+                }
+
+              /* Check for an end-of-file condition */
+
+              else if (nread == 0)
+                {
+                  return ntotal;
+                }
+
+              /* Update pointers and counts in order to handle partial
+               * buffer reads.
+               */
+
+              buffer    += nread;
+              remaining -= nread;
+              ntotal    += nread;
+            }
+          while (remaining > 0);
+        }
+    }
+
+  return ntotal;
+}
+
+/****************************************************************************
  * Public Functions
  ****************************************************************************/
 

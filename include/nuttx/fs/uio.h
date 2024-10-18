@@ -52,16 +52,4 @@ struct uio
 
 ssize_t iovec_total_len(FAR const struct uio *uio);
 
-/****************************************************************************
- * Name: iovec_compat_readv
- *
- * Description:
- *   Emulate readv using file_operation::compat_read.
- *
- ****************************************************************************/
-
-struct file;
-ssize_t iovec_compat_readv(FAR struct file *filep,
-                           FAR const struct uio *uio);
-
 #endif /* __INCLUDE_NUTTX_FS_UIO_H */
