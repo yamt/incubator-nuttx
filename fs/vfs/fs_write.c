@@ -121,7 +121,7 @@ static ssize_t iovec_compat_writev(FAR struct file *filep,
  *
  * Input Parameters:
  *   filep  - Instance of struct file to use with the write
- *   uio    - User buffer infomation
+ *   uio    - User buffer information
  *
  * Returned Value:
  *  On success, the number of bytes written are returned (zero indicates

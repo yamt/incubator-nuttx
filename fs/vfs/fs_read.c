@@ -127,7 +127,7 @@ static ssize_t iovec_compat_readv(FAR struct file *filep,
  *
  * Input Parameters:
  *   filep  - File structure instance
- *   uio    - User buffer infomation
+ *   uio    - User buffer information
  *
  * Returned Value:
  *   The positive non-zero number of bytes read on success, 0 on if an
