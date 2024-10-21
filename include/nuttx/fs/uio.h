@@ -31,6 +31,16 @@
  * Public Type Definitions
  ****************************************************************************/
 
+/* The structure to describe an user I/O operation.
+ *
+ * At this point, this is a bare minimum for readv/writev.
+ * In the future, we might extend this for other things like
+ * the file offset for pread/pwrite.
+ *
+ * This structure was inspired by BSDs.
+ * (Thus it doesn't have the NuttX-style "_s" suffix.)
+ */
+
 struct uio
 {
   FAR const struct iovec *uio_iov;
