@@ -61,7 +61,8 @@ define esp32_bt
     set $x_a1 = $arg2
     set $pc_topbits = (int)$x_pc & 0xc0000000
     # The return address from xtensa_sig_deliver to _xtensa_sig_trampoline
-    set $sig_tramp_ra = (int)(_xtensa_sig_trampoline + 2 * 3)
+    # set $sig_tramp_ra = (int)(_xtensa_sig_trampoline + 2 * 3)
+    set $sig_tramp_ra = 0
     print/a $x_pc
     while (1)
         # Note: "- 3" to workaround the case where "call" is
