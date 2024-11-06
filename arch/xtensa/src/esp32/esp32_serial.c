@@ -1361,7 +1361,7 @@ static int esp32_interrupt(int cpuint, void *context, void *arg)
   struct esp32_dev_s *priv;
   uint32_t regval;
   uint32_t status;
-  uint32_t enabled;
+  uint32_t intsta;
   unsigned int nfifo;
   int passes;
   bool handled;
@@ -1379,7 +1379,7 @@ static int esp32_interrupt(int cpuint, void *context, void *arg)
       handled      = false;
       priv->status = getreg32(UART_INT_RAW_REG(priv->config->id));
       status       = getreg32(UART_STATUS_REG(priv->config->id));
-      enabled      = getreg32(UART_INT_ENA_REG(priv->config->id));
+      intsta       = getreg32(UART_INT_ST_REG(priv->config->id));
 
       /* Clear pending interrupts */
 
@@ -1389,7 +1389,7 @@ static int esp32_interrupt(int cpuint, void *context, void *arg)
       putreg32(regval, UART_INT_CLR_REG(priv->config->id));
 
 #ifdef HAVE_RS485
-      if ((enabled & UART_TX_BRK_IDLE_DONE_INT_ENA) != 0 &&
+      if ((intsta & UART_TX_BRK_IDLE_DONE_INT_ST) != 0 &&
           (status & UART_TX_DONE_INT_ST) != 0)
         {
           /* If all bytes were transmitted, then we can disable the RS485
@@ -1405,13 +1405,13 @@ static int esp32_interrupt(int cpuint, void *context, void *arg)
         }
 #endif
 
-      /* Are Rx interrupts enabled?  The upper layer may hold off Rx input
+      /* Rx interrupts?  The upper layer may hold off Rx input
        * by disabling the Rx interrupts if there is no place to saved the
        * data, possibly resulting in an overrun error.
        */
 
-      if ((enabled & (UART_RXFIFO_FULL_INT_ENA |
-                      UART_RXFIFO_TOUT_INT_ENA)) != 0)
+      if ((intsta & (UART_RXFIFO_FULL_INT_ST |
+                     UART_RXFIFO_TOUT_INT_ST)) != 0)
         {
           /* Is there any data waiting in the Rx FIFO? */
 
@@ -1425,11 +1425,11 @@ static int esp32_interrupt(int cpuint, void *context, void *arg)
             }
         }
 
-      /* Are Tx interrupts enabled?  The upper layer will disable Tx
+      /* Tx interrupts?  The upper layer will disable Tx
        * interrupts when it has nothing to send.
        */
 
-      if ((enabled & (UART_TX_DONE_INT_ENA | UART_TXFIFO_EMPTY_INT_ENA))
+      if ((intsta & (UART_TX_DONE_INT_ST | UART_TXFIFO_EMPTY_INT_ST))
           != 0)
         {
           nfifo = REG_MASK(status, UART_TXFIFO_CNT);
