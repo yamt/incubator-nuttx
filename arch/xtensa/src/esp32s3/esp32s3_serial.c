@@ -1213,8 +1213,10 @@ void xtensa_serialinit(void)
 void up_putc(int ch)
 {
 #ifdef CONSOLE_UART
+  irqstate_t flags;
   uint32_t int_status;
 
+  flags = enter_critical_section();
   esp32s3_lowputc_disable_all_uart_int(CONSOLE_DEV.priv, &int_status);
 #endif
 
@@ -1222,6 +1224,7 @@ void up_putc(int ch)
 
 #ifdef CONSOLE_UART
   esp32s3_lowputc_restore_all_uart_int(CONSOLE_DEV.priv, &int_status);
+  leave_critical_section(flags);
 #endif
 }
 
@@ -1240,8 +1243,10 @@ void up_putc(int ch)
 void up_putc(int ch)
 {
 #ifdef CONSOLE_UART
+  irqstate_t flags;
   uint32_t int_status;
 
+  flags = enter_critical_section();
   esp32s3_lowputc_disable_all_uart_int(CONSOLE_DEV.priv, &int_status);
 #endif
 
@@ -1249,6 +1254,7 @@ void up_putc(int ch)
 
 #ifdef CONSOLE_UART
   esp32s3_lowputc_restore_all_uart_int(CONSOLE_DEV.priv, &int_status);
+  leave_critical_section(flags);
 #endif
 }
 
