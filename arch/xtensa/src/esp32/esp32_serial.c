@@ -2117,14 +2117,18 @@ void xtensa_serialinit(void)
 void up_putc(int ch)
 {
 #ifdef HAVE_SERIAL_CONSOLE
+
+  irqstate_t flags;
   uint32_t intena;
 
+  flags = enter_critical_section();
   esp32_disableallints(CONSOLE_DEV.priv, &intena);
 
   while (!esp32_txready(&CONSOLE_DEV));
   esp32_send(&CONSOLE_DEV, ch);
 
   esp32_restoreuartint(CONSOLE_DEV.priv, intena);
+  leave_critical_section(flags);
 #endif
 }
 #endif /* USE_SERIALDRIVER */
