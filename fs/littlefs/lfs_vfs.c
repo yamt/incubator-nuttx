@@ -772,7 +772,7 @@ static int littlefs_fstat(FAR const struct file *filep, FAR struct stat *buf)
                                                  &attr, sizeof(attr)));
   if (ret < 0)
     {
-      if (ret != -ENODATA && ret != -ENOENT)
+      if (ret != -ENODATA)
         {
           goto errout;
         }
