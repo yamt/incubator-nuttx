@@ -114,14 +114,15 @@ void uio_advance(FAR struct uio *uio, size_t sz)
 }
 
 /****************************************************************************
- * Name: uio_init
+ * Name: uio_init_full
  *
  * Description:
  *   Initialize the uio structure with reasonable default values.
  *
  ****************************************************************************/
 
-int uio_init(FAR struct uio *uio, FAR const struct iovec *iov, int iovcnt)
+int uio_init_full(FAR struct uio *uio, FAR const struct iovec *iov,
+                  int iovcnt)
 {
   ssize_t resid;
 

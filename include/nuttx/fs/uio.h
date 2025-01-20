@@ -27,6 +27,10 @@
 
 #include <sys/types.h>
 
+#include <errno.h> /* to inline uio_init */
+#include <limits.h> /* to inline uio_init */
+#include <string.h> /* to inline uio_init */
+
 /****************************************************************************
  * Public Type Definitions
  ****************************************************************************/
@@ -68,7 +72,7 @@ struct uio
 void uio_advance(FAR struct uio *uio, size_t sz);
 
 /****************************************************************************
- * Name: uio_init
+ * Name: uio_init_full
  *
  * Description:
  *   Initialize the uio structure with reasonable default values.
@@ -82,7 +86,11 @@ void uio_advance(FAR struct uio *uio, size_t sz);
  *
  ****************************************************************************/
 
-int uio_init(FAR struct uio *uio, FAR const struct iovec *iov, int iovcnt);
+int uio_init_full(FAR struct uio *uio, FAR const struct iovec *iov,
+                  int iovcnt);
+
+#define uio_init(uio, iov, iovcnt) \
+    ((iovcnt) == 1) ? (memset((uio), 0, sizeof(*(uio))), (uio)->uio_iov = (iov), (uio)->uio_iovcnt = 1, (uio)->uio_resid = (iov)[0].iov_len, (uio)->uio_resid > SSIZE_MAX ? -EINVAL : 0) : uio_init_full((uio), (iov), (iovcnt))
 
 /****************************************************************************
  * Name: uio_copyto
